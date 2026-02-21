@@ -12,6 +12,14 @@ Matlab_Code/
 │   ├── run.m                % Driver script to compare algorithms
 │   └── plotting.m           % Convergence visualization
 │
+├── TabPFN_matlab/           % MATLAB wrapper for TabPFN cloud API
+│   ├── TabPFNClassifier.m   % Classification wrapper (fit, predict, predict_proba)
+│   ├── TabPFNRegressor.m    % Regression wrapper (fit, predict)
+│   ├── install_tabpfn.m     % Install Python dependencies
+│   ├── setup_tabpfn.m       % Configure and verify Python environment
+│   ├── set_tabpfn_access_token.m % Set API access token
+│   └── example_*.m          % Usage examples
+│
 └── Teaching_materials/      % Teaching: Course materials I developed at MIT
     ├── Intro_to_ML_Lab_1.pdf        % Lab: Supervised learning (k-NN classification)
     ├── Intro_to_ML_Lab_2.pdf        % Lab: Unsupervised learning (k-Means clustering)
@@ -51,6 +59,39 @@ run   % Compares GP-GITBO vs GP-EI on a 200D Ackley benchmark
 % After the run completes:
 plotting   % Generates convergence comparison figures
 ```
+
+---
+
+## TabPFN for MATLAB
+
+A MATLAB wrapper for the [TabPFN](https://github.com/PriorLabs/tabpfn-client) cloud-based tabular prediction service. Mirrors the approach of [R-tabpfn](https://github.com/PriorLabs/R-tabpfn), using MATLAB's built-in Python interop (`py.*`) to call the Python `tabpfn-client` package.
+
+### Key features
+- `TabPFNClassifier` — classification with `fit`, `predict`, and `predict_proba`
+- `TabPFNRegressor` — regression with `fit` and `predict`
+- One-line setup: `install_tabpfn()` installs all Python dependencies
+- Handles MATLAB-to-numpy data conversion automatically
+
+### MATLAB features used
+| Feature | Where |
+|---|---|
+| `pyenv` — Python environment configuration | `setup_tabpfn.m` |
+| `py.importlib.import_module` — Python interop | All wrapper files |
+| `py.numpy.array` — MATLAB-to-numpy conversion | `TabPFNClassifier.m`, `TabPFNRegressor.m` |
+| `handle` class with OOP | `TabPFNClassifier.m`, `TabPFNRegressor.m` |
+| `validateattributes` — input validation | `TabPFNClassifier.m`, `TabPFNRegressor.m` |
+
+### Quick start
+```matlab
+pyenv('Version', '~/matlab-tabpfn-venv/bin/python')
+set_tabpfn_access_token('YOUR_TOKEN');
+
+clf = TabPFNClassifier();
+clf.fit(X_train, y_train);
+predictions = clf.predict(X_test);
+```
+
+See [`TabPFN_matlab/README.md`](TabPFN_matlab/README.md) for full installation and setup instructions.
 
 ---
 
